@@ -169,7 +169,7 @@ class CheckoutService
 			$this->sess->set('cancelOrderId', $cartOrderEntityObject->getOrderNumber());
 			$this->sess->set('sw_order_id', $cartOrderEntityObject->getId());
             $data['checkout']['returnUrl'] = $transaction->getReturnUrl();
-            $data['checkout']['cancelUrl'] = $this->requestStack->getCurrentRequest()->getUriForPath('/nets/order/cancel');
+            $data['checkout']['cancelUrl'] = $this->requestStack->getCurrentRequest()->get('errorUrl');
         }
         $data['checkout']['merchantTermsUrl'] = $this->configService->getMerchantTermsUrl($salesChannelContext->getSalesChannel()
             ->getId());
@@ -276,7 +276,7 @@ class CheckoutService
                     ->getLastname())
             ];
         }
-		
+
         return $data;
     }
 
@@ -354,7 +354,7 @@ class CheckoutService
                     }
                 };
 
-              
+
                 if ($display_gross) {
                     $taxFormat = '1' . str_pad(number_format((float) $taxes['taxRate'], 2, '.', ''), 5, '0', STR_PAD_LEFT);
                     $unitPrice = round(round(($product * 100) / $taxFormat, 2) * 100);
@@ -581,7 +581,7 @@ class CheckoutService
         $chargeId = $payment->getFirstChargeId();
         $payload = false;
 
-        // Refund functionality 
+        // Refund functionality
         $chargeArrWithAmountAvailable = array();
         $chargeIdArr = $payment->getAllCharges();
         $refundResult = false;
